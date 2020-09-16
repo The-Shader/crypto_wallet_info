@@ -1,0 +1,75 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:${project.kotlin_version}"
+    testImplementation "org.mockito:mockito-core:${project.mockito_version}"
+    testImplementation "androidx.test.ext:junit:${project.androidx_test_ext_version}"
+    androidTestImplementation "androidx.test:runner:${project.androidx_test_runner_version}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${project.espresso_version}"
+    androidTestImplementation "androidx.test.ext:junit:${project.androidx_test_ext_version}"
+    androidTestImplementation "androidx.test:runner:${project.androidx_test_runner_version}"
+
+    // dagger2
+    api "com.google.dagger:dagger:${project.dagger_version}"
+    api "com.google.dagger:dagger-android:${project.dagger_version}"
+    api "com.google.dagger:dagger-android-support:${project.dagger_version}"
+    kapt "com.google.dagger:dagger-compiler:${project.dagger_version}"
+    kapt "com.google.dagger:dagger-android-processor:${project.dagger_version}"
+
+    //rxjava2
+    api "io.reactivex.rxjava2:rxjava:${project.rxjava_version}"
+    api "io.reactivex.rxjava2:rxandroid:${project.rxandroid_version}"
+
+    //rxbinding
+    api "com.jakewharton.rxbinding2:rxbinding:${project.rxbinding_version}"
+    api "com.jakewharton.rxbinding2:rxbinding-kotlin:${project.rxbinding_version}"
+
+    // retrofit
+    implementation "com.squareup.retrofit2:retrofit:${project.retrofit_version}"
+    implementation "com.squareup.retrofit2:converter-gson:${project.retrofit_version}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${project.retrofit_version}"
+
+    // Room components
+    implementation "androidx.room:room-runtime:${project.room_version}"
+    implementation "androidx.room:room-ktx:${project.room_version}"
+    kapt "androidx.room:room-compiler:${project.room_version}"
+    implementation "androidx.room:room-rxjava2:${project.room_version}"
+    androidTestImplementation "androidx.room:room-testing:${project.room_version}"
+
+    api "com.squareup.okhttp3:logging-interceptor:${project.okhttp_interceptor_version}"
+    api "com.squareup.okhttp3:okhttp:${project.okhttp_version}"
+}
