@@ -1,6 +1,7 @@
 package com.fireblade.cryptowallet.business
 
 sealed class ScreenState {
+    object Init: ScreenState()
     object Loading: ScreenState()
 
     data class Success(

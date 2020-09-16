@@ -10,13 +10,14 @@ import com.babylon.orbit2.livedata.state
 import com.fireblade.cryptowallet.R
 import com.fireblade.cryptowallet.business.HomeViewModel
 import com.fireblade.cryptowallet.business.ScreenState
-import com.fireblade.persistence.network.services.IChainApiService
+import com.fireblade.repository.network.services.IChainApiService
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import kotlinx.android.synthetic.main.activity_home.*
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class HomeActivity : AppCompatActivity(), HasAndroidInjector {
@@ -32,6 +33,8 @@ class HomeActivity : AppCompatActivity(), HasAndroidInjector {
     @Inject
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
 
+    private val dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
+
     override fun androidInjector(): DispatchingAndroidInjector<Any> = androidInjector
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,15 +44,18 @@ class HomeActivity : AppCompatActivity(), HasAndroidInjector {
 
         list_of_transactions.adapter = transactionsAdapter
 
-        list_of_transactions.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL).apply {
-            ResourcesCompat.getDrawable(
-                resources,
-                R.drawable.divider_item_decoration,
-                null
-            )?.let { decoration ->
-                setDrawable(decoration)
-            }
-        })
+        list_of_transactions.addItemDecoration(
+            DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+                .apply {
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.divider_item_decoration,
+                        null
+                    )?.let { decoration ->
+                        setDrawable(decoration)
+                    }
+                }
+        )
 
         viewModel.container.state.observe(this, {
             render(it)
@@ -58,9 +64,10 @@ class HomeActivity : AppCompatActivity(), HasAndroidInjector {
 
     private fun render(screenState: ScreenState) {
         when(screenState) {
+            ScreenState.Init -> {}
             ScreenState.Loading -> progress_bar.visibility = View.VISIBLE
             is ScreenState.Success -> {
-                progress_bar.visibility = View.GONE
+                hideProgressBar()
                 setTransactions(screenState)
             }
             is ScreenState.Error -> showErrorState(screenState)
@@ -69,17 +76,25 @@ class HomeActivity : AppCompatActivity(), HasAndroidInjector {
 
     private fun setTransactions(screenState: ScreenState.Success) {
         val numOfDecimals = if (screenState.walletBalance == 0.0) 1 else 8
-        wallet_balance_value.text = getString(R.string.btc_value, screenState.walletBalance.toBigDecimal().setScale(numOfDecimals).toString())
+        wallet_balance_value.text = getString(
+            R.string.btc_value,
+            screenState.walletBalance.toBigDecimal()
+                .setScale(numOfDecimals).toString()
+        )
         transactionsAdapter.clear()
         transactionsAdapter.addAll(
             screenState.transactions.map {
-                TransactionViewItem(it)
+                TransactionViewItem(it, dateFormatter)
             }
         )
     }
 
     private fun showErrorState(screenState: ScreenState.Error) {
-        progress_bar.visibility = View.GONE
+        hideProgressBar()
         Toast.makeText(this, screenState.error, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun hideProgressBar() {
+        progress_bar.visibility = View.GONE
     }
 }
