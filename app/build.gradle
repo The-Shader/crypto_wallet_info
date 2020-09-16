@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        applicationId "com.fireblade.cryptowallet"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    implementation project(':persistence')
+
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:${project.kotlin_version}"
+    testImplementation "org.mockito:mockito-core:${project.mockito_version}"
+    testImplementation "androidx.test.ext:junit:${project.androidx_test_ext_version}"
+    androidTestImplementation "androidx.test:runner:${project.androidx_test_runner_version}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${project.espresso_version}"
+    androidTestImplementation "androidx.test.ext:junit:${project.androidx_test_ext_version}"
+    androidTestImplementation "androidx.test:runner:${project.androidx_test_runner_version}"
+
+    // dagger2
+    api "com.google.dagger:dagger:${project.dagger_version}"
+    api "com.google.dagger:dagger-android:${project.dagger_version}"
+    api "com.google.dagger:dagger-android-support:${project.dagger_version}"
+    kapt "com.google.dagger:dagger-compiler:${project.dagger_version}"
+    kapt "com.google.dagger:dagger-android-processor:${project.dagger_version}"
+
+    // support
+    implementation "androidx.core:core-ktx:${project.androidx_core_version}"
+    api "androidx.appcompat:appcompat:${project.appcompat_version}"
+    api "androidx.constraintlayout:constraintlayout:${project.constraint_version}"
+    api "com.google.android.material:material:${project.design_version}"
+
+    // Date desugaring
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.0.10"
+
+    //rxjava2
+    api "io.reactivex.rxjava2:rxjava:${project.rxjava_version}"
+    api "io.reactivex.rxjava2:rxandroid:${project.rxandroid_version}"
+
+    //rxbinding
+    api "com.jakewharton.rxbinding2:rxbinding:${project.rxbinding_version}"
+    api "com.jakewharton.rxbinding2:rxbinding-kotlin:${project.rxbinding_version}"
+
+    // retrofit
+    implementation "com.squareup.retrofit2:retrofit:${project.retrofit_version}"
+    implementation "com.squareup.retrofit2:converter-gson:${project.retrofit_version}"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:${project.retrofit_version}"
+
+    // Room components
+    implementation "androidx.room:room-runtime:${project.room_version}"
+    implementation "androidx.room:room-ktx:${project.room_version}"
+    kapt "androidx.room:room-compiler:${project.room_version}"
+    implementation "androidx.room:room-rxjava2:${project.room_version}"
+
+    api "com.squareup.okhttp3:logging-interceptor:${project.okhttp_interceptor_version}"
+    api "com.squareup.okhttp3:okhttp:${project.okhttp_version}"
+
+    // groupie
+    implementation "com.xwray:groupie:${project.groupie_version}"
+    implementation "com.xwray:groupie-kotlin-android-extensions:${project.groupie_version}"
+
+    // Orbit2
+    implementation("com.babylon.orbit2:orbit-rxjava2:${project.orbit2_version}")
+    implementation("com.babylon.orbit2:orbit-viewmodel:${project.orbit2_version}")
+    implementation("com.babylon.orbit2:orbit-livedata:${project.orbit2_version}")
+    testImplementation("com.babylon.orbit2:orbit-test:${project.orbit2_version}")
+
+}

@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">CryptoWallet</string>
+    <string name="transaction_history_label">Transaction History</string>
+    <string name="balance_label">Balance:</string>
+    <string name="btc_value">%s BTC</string>
+    <string name="transaction_type_icon_description">transaction type icon</string>
+    <string name="received_btc_label">Received BTC</string>
+    <string name="sent_btc_label">Sent BTC</string>
+    <string name="transaction_history_icon_description">Transaction history icon</string>
+</resources>
