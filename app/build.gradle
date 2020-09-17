@@ -51,9 +51,12 @@ dependencies {
     testImplementation "com.appmattus.fixture:fixture:${project.kotlin_fixtures_version}"
     testImplementation "androidx.test.ext:junit:${project.androidx_test_ext_version}"
     androidTestImplementation "androidx.test:runner:${project.androidx_test_runner_version}"
-    androidTestImplementation "androidx.test.espresso:espresso-core:${project.espresso_version}"
     androidTestImplementation "androidx.test.ext:junit:${project.androidx_test_ext_version}"
-    androidTestImplementation "androidx.test:runner:${project.androidx_test_runner_version}"
+    androidTestImplementation "androidx.test:rules:${project.androidx_test_runner_version}"
+
+    // Espresso and Kakao
+    androidTestImplementation "androidx.test.espresso:espresso-core:${project.espresso_version}"
+    androidTestImplementation "com.agoda.kakao:kakao:${project.kakao_version}"
 
     // dagger2
     api "com.google.dagger:dagger:${project.dagger_version}"
