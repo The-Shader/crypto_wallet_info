@@ -21,43 +21,13 @@ class ChainRepository @Inject constructor(
     private val transactionDAO: TransactionDAO,
 ) : IChainRepository {
 
+    // This is here for simplicity, should store it in a secured way
     private val ownXPubAddress =
         "xpub6CfLQa8fLgtouvLxrb8EtvjbXfoC1yqzH6YbTJw4dP7srt523AhcMV8Uh4K3TWSHz9oDWmn9MuJogzdGU3ncxkBsAC9wFBLmFrWT9Ek81kQ"
 
-    private fun syncWallet(): Flowable<Wallet> {
-        return Flowable.concat(
-            walletDAO.getWalletMaybe(ownXPubAddress).toFlowable()
-                .map {
-                    it.toModel()
-                },
-            chainApiService.getWallet(ownXPubAddress)
-                .map {
-                    DatabaseWallet(
-                        ownXPubAddress,
-                        it.wallet.finalBalance
-                    )
-                }.flatMapCompletable(walletDAO::insertWallet)
-                .onErrorComplete()
-                .toFlowable()
-        ).distinctUntilChanged()
-    }
-
-    private fun syncTransactions(): Flowable<List<Transaction>> {
-        return Flowable.concat(
-            transactionDAO.getAllTransactionsMaybe()
-                .map {
-                    it.map(DatabaseTransaction::toModel)
-                }.toFlowable(),
-            chainApiService.getTransactions(ownXPubAddress)
-                .map {
-                    it.txs.map(NetworkTransaction::toEntity)
-                }
-                .flatMapCompletable(transactionDAO::insertTransactions)
-                .onErrorComplete()
-                .toFlowable()
-        ).distinctUntilChanged()
-    }
-
+    // Both get functions are attempting to sync the local data with the network by obtaining the
+    // data from the database if there's any, then trying to get the latest from the network. On success
+    // save it to the database and return it here.
     override fun getWallet(): Flowable<Status<Wallet>> {
         return Flowable.concat(
             syncWallet()
@@ -94,5 +64,39 @@ class ChainRepository @Inject constructor(
                     Status.Failure(Exception("Local cache error"))
                 }
         )
+    }
+
+    private fun syncWallet(): Flowable<Wallet> {
+        return Flowable.concat(
+            walletDAO.getWalletMaybe(ownXPubAddress).toFlowable()
+                .map {
+                    it.toModel()
+                },
+            chainApiService.getWallet(ownXPubAddress)
+                .map {
+                    DatabaseWallet(
+                        ownXPubAddress,
+                        it.wallet.finalBalance
+                    )
+                }.flatMapCompletable(walletDAO::insertWallet)
+                .onErrorComplete()
+                .toFlowable()
+        ).distinctUntilChanged()
+    }
+
+    private fun syncTransactions(): Flowable<List<Transaction>> {
+        return Flowable.concat(
+            transactionDAO.getAllTransactionsMaybe()
+                .map {
+                    it.map(DatabaseTransaction::toModel)
+                }.toFlowable(),
+            chainApiService.getTransactions(ownXPubAddress)
+                .map {
+                    it.txs.map(NetworkTransaction::toEntity)
+                }
+                .flatMapCompletable(transactionDAO::insertTransactions)
+                .onErrorComplete()
+                .toFlowable()
+        ).distinctUntilChanged()
     }
 }

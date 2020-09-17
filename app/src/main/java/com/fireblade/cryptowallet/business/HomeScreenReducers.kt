@@ -5,6 +5,7 @@ import com.fireblade.repository.model.Transaction
 import com.fireblade.repository.model.Wallet
 import javax.inject.Inject
 
+// A state machine to reduce the states based on the received events and the current state
 class HomeScreenReducers @Inject constructor() {
 
     fun reduceWalletBalance(currentState: ScreenState, event: Status<Wallet>) =

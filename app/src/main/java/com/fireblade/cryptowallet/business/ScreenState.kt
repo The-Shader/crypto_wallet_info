@@ -1,5 +1,7 @@
 package com.fireblade.cryptowallet.business
 
+// In the future it's probably better to split the result state for the wallet and the transactions
+// into separate sub-classes
 sealed class ScreenState {
     object Loading: ScreenState()
 

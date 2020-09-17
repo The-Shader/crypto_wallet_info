@@ -8,6 +8,9 @@ import com.babylon.orbit2.viewmodel.container
 import com.fireblade.repository.repository.IChainRepository
 import javax.inject.Inject
 
+// The core of the MVI Orbit architecture is the Orbit-Android ViewModel, with a Container which
+// takes care of operating the reactive streams on background (computation and IO) threads. Important
+// note, that while it has an RX plugin to ease working Rx-style, it uses coroutines internally.
 class HomeViewModel @Inject constructor(
     private val reducers: HomeScreenReducers,
     private val chainRepository: IChainRepository
