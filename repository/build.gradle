@@ -48,7 +48,6 @@ dependencies {
     testImplementation "androidx.test.ext:junit:${project.androidx_test_ext_version}"
     androidTestImplementation "androidx.test:runner:${project.androidx_test_runner_version}"
     androidTestImplementation "androidx.test.ext:junit:${project.androidx_test_ext_version}"
-    androidTestImplementation "androidx.test:runner:${project.androidx_test_runner_version}"
 
     // dagger2
     api "com.google.dagger:dagger:${project.dagger_version}"
