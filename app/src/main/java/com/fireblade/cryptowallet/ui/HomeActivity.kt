@@ -10,6 +10,7 @@ import com.babylon.orbit2.livedata.state
 import com.fireblade.cryptowallet.R
 import com.fireblade.cryptowallet.business.HomeViewModel
 import com.fireblade.cryptowallet.business.ScreenState
+import com.fireblade.cryptowallet.business.getAbsValueInBTC
 import com.fireblade.repository.network.services.IChainApiService
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
@@ -60,27 +61,33 @@ class HomeActivity : AppCompatActivity(), HasAndroidInjector {
         viewModel.container.state.observe(this, {
             render(it)
         })
+        viewModel.loadWallet()
+        viewModel.loadTransactions()
     }
 
     private fun render(screenState: ScreenState) {
         when(screenState) {
-            ScreenState.Init -> {}
             ScreenState.Loading -> progress_bar.visibility = View.VISIBLE
             is ScreenState.Success -> {
                 hideProgressBar()
+                setWalletInfo(screenState)
                 setTransactions(screenState)
             }
             is ScreenState.Error -> showErrorState(screenState)
         }
     }
 
-    private fun setTransactions(screenState: ScreenState.Success) {
-        val numOfDecimals = if (screenState.walletBalance == 0.0) 1 else 8
+    private fun setWalletInfo(screenState: ScreenState.Success) {
+        // Prevent displaying a lot of zeros when the balance is 0
+        val numOfDecimals = if (screenState.walletBalance == 0.toLong()) 1 else 8
         wallet_balance_value.text = getString(
             R.string.btc_value,
-            screenState.walletBalance.toBigDecimal()
+            getAbsValueInBTC(screenState.walletBalance).toBigDecimal()
                 .setScale(numOfDecimals).toString()
         )
+    }
+
+    private fun setTransactions(screenState: ScreenState.Success) {
         transactionsAdapter.clear()
         transactionsAdapter.addAll(
             screenState.transactions.map {

@@ -6,6 +6,9 @@ import com.fireblade.cryptowallet.business.TransactionType
 import com.xwray.groupie.kotlinandroidextensions.GroupieViewHolder
 import com.xwray.groupie.kotlinandroidextensions.Item
 import kotlinx.android.synthetic.main.transaction_list_item.view.*
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 class TransactionViewItem(private val transactionItem: TransactionItem, private val dateTimeFormatter: DateTimeFormatter): Item() {
@@ -15,8 +18,18 @@ class TransactionViewItem(private val transactionItem: TransactionItem, private 
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
         viewHolder.itemView.apply {
-            tx_value.text = resources.getString(R.string.btc_value, transactionItem.valueInBTC.toBigDecimal().setScale(8).toString())
-            transaction_date.text = transactionItem.time.format(dateTimeFormatter)
+            tx_value.text = resources.getString(
+                R.string.btc_value,
+                transactionItem.valueInBTC
+                    .toBigDecimal()
+                    .setScale(8)
+                    .toString()
+            )
+            transaction_date.text = LocalDateTime.ofInstant(
+                Instant.ofEpochSecond(transactionItem.time),
+                ZoneId.systemDefault()
+            )
+                .format(dateTimeFormatter)
 
             when(transactionItem.transactionType) {
                 TransactionType.SENT -> {

@@ -13,24 +13,21 @@ class HomeViewModel @Inject constructor(
     private val chainRepository: IChainRepository
 ) : ContainerHost<ScreenState, Nothing>, ViewModel() {
 
-    override val container = container<ScreenState, Nothing>(ScreenState.Init) {
-        loadWalletInfo()
-    }
+    override val container = container<ScreenState, Nothing>(ScreenState.Loading)
 
-    private fun loadWalletInfo() = orbit {
-
-        reduce {
-            ScreenState.Loading
+    fun loadWallet() = orbit {
+        transformRx2Observable {
+            chainRepository.getWallet().toObservable()
         }
-            .transformRx2Observable {
-                chainRepository.getWallet().toObservable()
-            }
             .reduce {
                 reducers.reduceWalletBalance(state, event)
             }
-            .transformRx2Observable {
-                chainRepository.getTransactions().toObservable()
-            }
+    }
+
+    fun loadTransactions() = orbit {
+        transformRx2Observable {
+            chainRepository.getTransactions().toObservable()
+        }
             .reduce {
                 reducers.reduceTransactions(state, event)
             }

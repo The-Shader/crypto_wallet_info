@@ -3,9 +3,6 @@ package com.fireblade.cryptowallet.business
 import com.fireblade.repository.repository.utils.Status
 import com.fireblade.repository.model.Transaction
 import com.fireblade.repository.model.Wallet
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 import javax.inject.Inject
 
 class HomeScreenReducers @Inject constructor() {
@@ -13,17 +10,16 @@ class HomeScreenReducers @Inject constructor() {
     fun reduceWalletBalance(currentState: ScreenState, event: Status<Wallet>) =
         when(event) {
             is Status.Success -> {
-                val balanceInBTC = getAbsValueInBTC(event.result.balance)
                 when (currentState) {
                     is ScreenState.Success -> currentState.copy(
-                        walletBalance = balanceInBTC
+                        walletBalance = event.result.balance
                     )
                     else -> ScreenState.Success(
-                        walletBalance = balanceInBTC
+                        walletBalance = event.result.balance
                     )
                 }
             }
-            is Status.Failure -> ScreenState.Error(event.error.message ?: "Unknown error occurred")
+            is Status.Failure -> ScreenState.Error(event.error.message ?: UNKNOWN_ERROR)
         }
 
     fun reduceTransactions(currentState: ScreenState, event: Status<List<Transaction>>) =
@@ -39,14 +35,18 @@ class HomeScreenReducers @Inject constructor() {
                     )
                 }
             }
-            is Status.Failure -> ScreenState.Error(event.error.message ?: "Unknown error occurred")
+            is Status.Failure -> ScreenState.Error(event.error.message ?: UNKNOWN_ERROR)
         }
+
+    companion object {
+        const val UNKNOWN_ERROR = "Unknown error occurred"
+    }
 }
 
 fun Transaction.toItem() =
     TransactionItem(
         valueInBTC = getAbsValueInBTC(result),
-        time = LocalDateTime.ofInstant(Instant.ofEpochSecond(time), ZoneId.systemDefault()),
+        time = time,
         hash = hash,
         feeInBtc = getAbsValueInBTC(fee),
         transactionType = if (result < 0) TransactionType.SENT else TransactionType.RECEIVED
