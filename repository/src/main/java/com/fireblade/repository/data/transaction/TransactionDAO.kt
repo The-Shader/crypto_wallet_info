@@ -21,5 +21,5 @@ interface TransactionDAO {
     fun insertTransactions(transactions: List<DatabaseTransaction>): Completable
 
     @Query("delete from Transactions")
-    fun deleteTransactions()
+    fun deleteTransactions(): Completable
 }

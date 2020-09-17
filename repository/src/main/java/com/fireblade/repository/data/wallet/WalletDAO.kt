@@ -20,5 +20,5 @@ interface WalletDAO {
     fun insertWallet(wallet: DatabaseWallet): Completable
 
     @Query("delete from Wallet")
-    fun deleteWallet()
+    fun deleteWallet(): Completable
 }
