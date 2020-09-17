@@ -40,7 +40,15 @@ dependencies {
     implementation project(':repository')
 
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:${project.kotlin_version}"
+
+    // Mocking
     testImplementation "org.mockito:mockito-core:${project.mockito_version}"
+    testImplementation "org.mockito:mockito-inline:${project.mockito_version}"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:${project.mockito_kotlin_version}"
+
+    // JUnit and Jupiter API
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${project.junit_jupiter_version}"
+    testImplementation "com.appmattus.fixture:fixture:${project.kotlin_fixtures_version}"
     testImplementation "androidx.test.ext:junit:${project.androidx_test_ext_version}"
     androidTestImplementation "androidx.test:runner:${project.androidx_test_runner_version}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${project.espresso_version}"
@@ -66,10 +74,6 @@ dependencies {
     //rxjava2
     api "io.reactivex.rxjava2:rxjava:${project.rxjava_version}"
     api "io.reactivex.rxjava2:rxandroid:${project.rxandroid_version}"
-
-    //rxbinding
-    api "com.jakewharton.rxbinding2:rxbinding:${project.rxbinding_version}"
-    api "com.jakewharton.rxbinding2:rxbinding-kotlin:${project.rxbinding_version}"
 
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:${project.retrofit_version}"
