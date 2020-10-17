@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class NetworkModule {
 
     @Provides
-    fun providePlaceholderApiService(chainApiSdk: ChainApiSdk) : IChainApiService =
+    fun provideChainApiService(chainApiSdk: ChainApiSdk) : IChainApiService =
         IChainApiService.create(chainApiSdk)
 
     @Provides
