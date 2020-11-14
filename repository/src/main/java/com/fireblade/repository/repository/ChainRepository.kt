@@ -51,7 +51,7 @@ class ChainRepository @Inject constructor(
         return Flowable.concat(
             syncTransactions()
                 .map<Status<List<Transaction>>> {
-                Status.Success(it)
+                    Status.Success(it)
                 }
                 .onErrorReturn {
                     Status.Failure(Exception("Network sync error"))
