@@ -34,9 +34,9 @@ class HttpClientBuilder @Inject constructor(private val applicationContext: Cont
     }
 
     private fun hasNetworkAccess() : Boolean {
-        val connectivityManager = applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
-        return activeNetwork != null && activeNetwork.isConnected
+        val activeNetwork: NetworkInfo? =
+            (applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
+        return activeNetwork?.isConnected ?: false
     }
 
     companion object {
