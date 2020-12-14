@@ -56,9 +56,9 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:${project.dagger_version}"
     kapt "com.google.dagger:dagger-android-processor:${project.dagger_version}"
 
-    //rxjava2
-    api "io.reactivex.rxjava2:rxjava:${project.rxjava_version}"
-    api "io.reactivex.rxjava2:rxandroid:${project.rxandroid_version}"
+    //rxjava
+    implementation "io.reactivex.rxjava3:rxandroid:${project.rxjava_version}"
+    implementation "io.reactivex.rxjava3:rxjava:${project.rxjava_version}"
 
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:${project.retrofit_version}"
