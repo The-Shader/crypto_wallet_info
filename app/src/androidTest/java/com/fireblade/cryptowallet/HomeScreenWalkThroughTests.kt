@@ -1,6 +1,6 @@
 package com.fireblade.cryptowallet
 
-import androidx.test.rule.ActivityTestRule
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.agoda.kakao.common.utilities.getResourceString
 import com.fireblade.cryptowallet.ui.HomeActivity
 import org.junit.Rule
@@ -10,7 +10,7 @@ class HomeScreenWalkThroughTests {
 
     @Rule
     @JvmField
-    var rule = ActivityTestRule(HomeActivity::class.java)
+    var rule = ActivityScenarioRule(HomeActivity::class.java)
 
     private val homeScreen = HomeScreen()
 

@@ -1,11 +1,14 @@
 package com.fireblade.cryptowallet.business
 
 import androidx.lifecycle.ViewModel
-import com.babylon.orbit2.ContainerHost
-import com.babylon.orbit2.reduce
-import com.babylon.orbit2.rxjava2.transformRx2Observable
-import com.babylon.orbit2.viewmodel.container
 import com.fireblade.repository.repository.IChainRepository
+import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.reactive.asFlow
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.reduce
+import org.orbitmvi.orbit.viewmodel.container
 import javax.inject.Inject
 
 // The core of the MVI Orbit architecture is the Orbit-Android ViewModel, with a Container which
@@ -18,21 +21,20 @@ class HomeViewModel @Inject constructor(
 
     override val container = container<ScreenState, Nothing>(ScreenState.Loading)
 
-    fun loadWallet() = orbit {
-        transformRx2Observable {
-            chainRepository.getWallet().toObservable()
-        }
-            .reduce {
-                reducers.reduceWalletBalance(state, event)
+    fun loadWallet() = intent {
+        chainRepository.getWallet().subscribeOn(Schedulers.io()).asFlow().collect { result ->
+            reduce {
+                reducers.reduceWalletBalance(state, result)
             }
+        }
     }
 
-    fun loadTransactions() = orbit {
-        transformRx2Observable {
-            chainRepository.getTransactions().toObservable()
-        }
-            .reduce {
-                reducers.reduceTransactions(state, event)
+    fun loadTransactions() = intent {
+
+        chainRepository.getTransactions().subscribeOn(Schedulers.io()).asFlow().collect { result ->
+            reduce {
+                reducers.reduceTransactions(state, result)
             }
+        }
     }
 }
