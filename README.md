@@ -13,11 +13,10 @@ The following features and techniques have been implemented/used:
 * UI tests with `Espresso` and `Kakao` for [HomeActivity](https://github.com/The-Shader/crypto_wallet_info/blob/develop/app/src/androidTest/java/com/fireblade/cryptowallet/HomeScreenWalkThroughTests.kt)
 * CoordinatorLayout for full screen comment scrolling
 * `Dagger2` for dependency injection
-* `RxJava2` streams for async data loading both from the database and from the network
+* `RxJava3` streams for async data loading both from the database and from the network
 * Using `AndroidX` libraries
 
 Missing/can be improved:
-* Upgrading to `RxJava3`
 * Better state handling with init-state and timeouts on failing to load
 * Start using styles and themes
 * Introduce `Dagger Hilt` for `AssistedInject` and `ViewModelInject`
