@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
-import com.babylon.orbit2.livedata.state
 import com.fireblade.cryptowallet.R
 import com.fireblade.cryptowallet.business.HomeViewModel
 import com.fireblade.cryptowallet.business.ScreenState
@@ -18,6 +18,7 @@ import dagger.android.AndroidInjection
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.coroutines.flow.collect
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -58,9 +59,11 @@ class HomeActivity : AppCompatActivity(), HasAndroidInjector {
                 }
         )
 
-        viewModel.container.state.observe(this, {
-            render(it)
-        })
+        lifecycleScope.launchWhenCreated {
+            viewModel.container.stateFlow.collect { state ->
+                render(state)
+            }
+        }
         viewModel.loadWallet()
         viewModel.loadTransactions()
     }
