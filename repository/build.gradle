@@ -71,7 +71,7 @@ dependencies {
     kapt "androidx.room:room-compiler:${project.room_version}"
     implementation "androidx.room:room-rxjava2:${project.room_version}"
     androidTestImplementation "androidx.room:room-testing:${project.room_version}"
-    androidTestImplementation "android.arch.core:core-testing:${project.room_version}"
+    androidTestImplementation "androidx.arch.core:core-testing:${project.androidx_arch_core_testing_version}"
 
     api "com.squareup.okhttp3:logging-interceptor:${project.okhttp_interceptor_version}"
     api "com.squareup.okhttp3:okhttp:${project.okhttp_version}"

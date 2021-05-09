@@ -1,8 +1,6 @@
 package com.fireblade.cryptowallet
 
 import com.appmattus.kotlinfixture.kotlinFixture
-import com.babylon.orbit2.assert
-import com.babylon.orbit2.test
 import com.fireblade.cryptowallet.business.*
 import com.fireblade.repository.model.Transaction
 import com.fireblade.repository.model.Wallet
@@ -12,6 +10,8 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Flowable
 import org.junit.Test
+import org.orbitmvi.orbit.assert
+import org.orbitmvi.orbit.test
 
 class HomeViewModelTest {
 
@@ -37,7 +37,7 @@ class HomeViewModelTest {
         homeViewModel.loadTransactions()
 
 
-        homeViewModel.assert {
+        homeViewModel.assert(ScreenState.Loading) {
             states(
                 { ScreenState.Success(transactions = transactionItems) }
             )
@@ -58,7 +58,7 @@ class HomeViewModelTest {
         )
         homeViewModel.loadTransactions()
 
-        homeViewModel.assert {
+        homeViewModel.assert(ScreenState.Loading) {
             states(
                 { ScreenState.Error(error = getTransactionsException.message ?: HomeScreenReducers.UNKNOWN_ERROR) }
             )
@@ -79,7 +79,7 @@ class HomeViewModelTest {
 
         homeViewModel.loadWallet()
 
-        homeViewModel.assert {
+        homeViewModel.assert(ScreenState.Loading) {
             states(
                 { ScreenState.Success(walletBalance = wallet.balance) },
             )
@@ -101,7 +101,7 @@ class HomeViewModelTest {
 
         homeViewModel.loadWallet()
 
-        homeViewModel.assert {
+        homeViewModel.assert(ScreenState.Loading) {
             states(
                 { ScreenState.Error(error = getWalletException.message ?: HomeScreenReducers.UNKNOWN_ERROR) },
             )
